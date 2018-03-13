@@ -30,39 +30,49 @@ class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      list: [{
-        _id: 1,
-        title: 'est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
-        link: 'google.com',
-        saved: true
-      }, {
-        _id: 2,
-        title: 'example',
-        link: 'facebook.com',
-        saved: false
-      }],
-      savedList: [{
-        _id: 1,
-        title: 'liked1',
-        link: 'linkedin.com'
-      }, {
-          _id: 2,
-          title: 'liked2',
-          link: 'github.com'
-        }]
+      list: [],
+      savedList: []
     }
     this.handleScrap = this.handleScrap.bind(this)
   }
 
   handleScrap () {
-    console.log(this.state.list)
-    fetch('/api/posts/scrap')
-      .then(res => res.json())
-      .then(result => this.setState({list: result}))
-      .then(console.log(this.state.list))
+    const proxyurl = "https://cors-anywhere.herokuapp.com/"
+    const url = 'https://scotch-scraper.herokuapp.com/scrape'
+    fetch(proxyurl + url)
+      .then(res => console.log(res.status))
+      .then(result => window.location.reload())
       .catch((error) => {
         console.error(error)
       })
+  }
+
+  componentDidMount () {
+    this.getAllArticle()
+    this.getAllSaved(() => console.log(this.state.savedList))
+  }
+
+  getAllArticle() {
+    const proxyurl = 'https://cors-anywhere.herokuapp.com/'
+    const url = 'https://scotch-scraper.herokuapp.com/articles'
+    fetch(proxyurl + url)
+      .then(res => res.json())
+      .then(result => this.setState({list: result}))
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
+  getAllSaved(cb) {
+    const proxyurl = 'https://cors-anywhere.herokuapp.com/'
+    const url = 'https://scotch-scraper.herokuapp.com/saved'
+    fetch(proxyurl + url)
+      .then(res => res.json())
+      .then(result => this.setState({savedList: result}))
+      .catch((error) => {
+        console.error(error)
+      })
+      .then(cb)
   }
 
   render () {

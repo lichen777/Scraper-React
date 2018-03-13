@@ -29,9 +29,9 @@ class SavedPost extends Component {
         <Segment clearing>
           <div>
             <h5>
-              <a href={this.props.link}>{this.props.title}</a> 
-              <Button floated='right' color='purple' onClick={() => this.handleNoteClick(this.props._id)}> Add Note </Button> 
-              <Button floated='right' color='red' onClick={() => this.handleRemoveClick(this.props._id)}> Remove </Button>
+              <a href={this.props.link} target="_blank">{this.props.title}</a>
+              <Button compact floated='right' color='purple' onClick={() => this.handleNoteClick(this.props._id)}> Add Note </Button>
+              <Button compact floated='right' color='red' onClick={() => this.handleRemoveClick(this.props._id)}> Remove </Button>
             </h5>
           </div>
         </Segment>
