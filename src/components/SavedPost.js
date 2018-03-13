@@ -14,10 +14,17 @@ class SavedPost extends Component {
   }
 
   handleRemoveClick (key) {
-    console.log(key)
-    fetch('/api/posts/scrap')
+    const proxyurl = 'https://cors-anywhere.herokuapp.com/'
+    const url = 'https://scotch-scraper.herokuapp.com/saved/' + key
+    fetch(proxyurl + url, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
       .then(res => res.json())
-      .then(result => this.setState({ list: result }))
+      .then(result => window.location.reload())
       .catch((error) => {
         console.error(error)
       })
@@ -29,9 +36,10 @@ class SavedPost extends Component {
         <Segment clearing>
           <div>
             <h5>
-              <a href={this.props.link}>{this.props.title}</a> 
-              <Button floated='right' color='purple' onClick={() => this.handleNoteClick(this.props._id)}> Add Note </Button> 
-              <Button floated='right' color='red' onClick={() => this.handleRemoveClick(this.props._id)}> Remove </Button>
+              <a href={this.props.link} target="_blank">{this.props.title}</a>
+              <p></p>
+              <Button compact floated='right' color='purple' onClick={() => this.handleNoteClick(this.props._id)}> Add Note </Button>
+              <Button compact floated='right' color='red' onClick={() => this.handleRemoveClick(this.props._id)}> Remove </Button>
             </h5>
           </div>
         </Segment>
