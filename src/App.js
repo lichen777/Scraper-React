@@ -10,18 +10,20 @@ import SavedPost from './components/SavedPost'
 
 const HomeContent = props => (
   <Container text style={{ marginTop: '5em' }}>
-    {props.list.map(item => <div key={item._id}>
-                              <Post _id={item._id} title={item.title} link={item.link} saved={item.saved} />
-                            </div>
+    {props.list.map(item =>
+      <div key={item._id}>
+        <Post _id={item._id} title={item.title} link={item.link} saved={item.saved} />
+      </div>
      )}
   </Container>
 )
 
 const SavedContent = props => (
   <Container text style={{ marginTop: '5em' }}>
-    {props.list.map(item => <div key={item._id}>
-                              <SavedPost _id={item._id} title={item.title} link={item.link} />
-                            </div>
+    {props.list.map(item =>
+      <div key={item._id}>
+        <SavedPost _id={item._id} title={item.title} link={item.link} />
+      </div>
      )}
   </Container>
 )

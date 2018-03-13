@@ -25,11 +25,15 @@ class Post extends Component {
       <div id={this.props._id}>
         <Segment clearing>
           <div>
-            <h5><a href={this.props.link} target="_blank">{this.props.title}</a> <Button
-                                                                           compact
-                                                                           floated='right'
-                                                                           color={this.props.saved ? 'violet' : 'green'}
-                                                                           onClick={() => this.handleSaveClick(this.props._id)}> {this.props.saved ? 'Saved' : 'Save'} </Button></h5>
+            <h5>
+              <a href={this.props.link} target="_blank">{this.props.title}</a>
+              <Button
+                 compact
+                 floated='right'
+                 color={this.props.saved ? 'violet' : 'green'}
+                 onClick={() => this.handleSaveClick(this.props._id)}> {this.props.saved ? 'Saved' : 'Save'}
+               </Button>
+            </h5>
           </div>
         </Segment>
         <p></p>
