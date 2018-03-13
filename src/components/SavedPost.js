@@ -30,6 +30,7 @@ class SavedPost extends Component {
           <div>
             <h5>
               <a href={this.props.link} target="_blank">{this.props.title}</a>
+              <p></p>
               <Button compact floated='right' color='purple' onClick={() => this.handleNoteClick(this.props._id)}> Add Note </Button>
               <Button compact floated='right' color='red' onClick={() => this.handleRemoveClick(this.props._id)}> Remove </Button>
             </h5>

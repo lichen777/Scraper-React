@@ -27,6 +27,7 @@ class Post extends Component {
           <div>
             <h5>
               <a href={this.props.link} target="_blank">{this.props.title}</a>
+              <p></p>
               <Button
                  compact
                  floated='right'
