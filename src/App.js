@@ -11,7 +11,7 @@ import SavedPost from './components/SavedPost'
 const HomeContent = props => (
   <Container text style={{ marginTop: '5em' }}>
     {props.list.map(item => <div key={item._id}>
-                              <Post _id={item._id} title={item.title} link={item.link} />
+                              <Post _id={item._id} title={item.title} link={item.link} saved={item.saved} />
                             </div>
      )}
   </Container>
@@ -30,8 +30,26 @@ class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      list: [],
-      savedList: []
+      list: [{
+        _id: 1,
+        title: 'est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+        link: 'google.com',
+        saved: true
+      }, {
+        _id: 2,
+        title: 'example',
+        link: 'facebook.com',
+        saved: false
+      }],
+      savedList: [{
+        _id: 1,
+        title: 'liked1',
+        link: 'linkedin.com'
+      }, {
+          _id: 2,
+          title: 'liked2',
+          link: 'github.com'
+        }]
     }
     this.handleScrap = this.handleScrap.bind(this)
   }
@@ -48,25 +66,7 @@ class App extends Component {
   }
 
   render () {
-    const list = [{
-      _id: 1,
-      title: 'est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
-      link: 'google.com'
-    }, {
-      _id: 2,
-      title: 'NO',
-      link: 'facebook.com'
-    }]
-
-    const savedList = [{
-      _id: 1,
-      title: 'PPL',
-      link: 'linkedin.com'
-    }, {
-      _id: 2,
-      title: 'dfadf',
-      link: 'github.com'
-    }]
+    const {list, savedList} = this.state
 
     return (
       <Router>
@@ -94,7 +94,6 @@ class App extends Component {
             <Route exact path='/' render={() => <HomeContent list={list} />} />
             <Route path='/saved' render={() => <SavedContent list={savedList} />} />
           </div>
-          //<AutoSearch source={list} />
         </div>
       </Router>
     )
