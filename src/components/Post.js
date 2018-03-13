@@ -7,7 +7,7 @@ class Post extends Component {
     const proxyurl = 'https://cors-anywhere.herokuapp.com/'
     const url = 'https://scotch-scraper.herokuapp.com/articles/' + key
     fetch(proxyurl + url, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'

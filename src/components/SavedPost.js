@@ -14,10 +14,17 @@ class SavedPost extends Component {
   }
 
   handleRemoveClick (key) {
-    console.log(key)
-    fetch('/api/posts/scrap')
+    const proxyurl = 'https://cors-anywhere.herokuapp.com/'
+    const url = 'https://scotch-scraper.herokuapp.com/saved/' + key
+    fetch(proxyurl + url, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
       .then(res => res.json())
-      .then(result => this.setState({ list: result }))
+      .then(result => window.location.reload())
       .catch((error) => {
         console.error(error)
       })
