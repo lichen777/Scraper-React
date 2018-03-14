@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import './App.css'
-import { Menu, Container, Button, Input } from 'semantic-ui-react'
+import { Menu, Container } from 'semantic-ui-react'
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import ScrapButton from './components/ScrapButton'
 import HomeContent from './components/HomeContent'
 import SavedContent from './components/SavedContent'
-import AutoSearch from './components/Search'
+import Search from './components/Search'
 
 class App extends Component {
   constructor (props) {
@@ -83,11 +83,7 @@ class App extends Component {
               </Link>
               <ScrapButton text='Scrap New Articles' onScrapClick={this.handleScrap} />
               <Menu.Item position='right'>
-                <Input type='text' placeholder='Search...' action>
-                <input />
-                <Button type='submit' icon='search'>
-                </Button>
-                </Input>
+                <Search source={list} />
               </Menu.Item>
             </Container>
           </Menu>

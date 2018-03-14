@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import { Search } from 'semantic-ui-react'
+import { Search, Button, Input } from 'semantic-ui-react'
 
 export default class AutoSearch extends Component {
     componentWillMount() {
@@ -31,14 +31,22 @@ export default class AutoSearch extends Component {
         const { isLoading, value, results } = this.state
 
         return (
-          <Search
-              loading={isLoading}
-              onResultSelect={this.handleResultSelect}
-              onSearchChange={this.handleSearchChange}
-              results={results}
-              value={value}
-              {...this.props}
-          />
+          <Menu.Item position='right'>
+            <Input type='text' placeholder='Search...' action>
+            <input value={value} />
+            <Button type='submit' icon='search'>
+            </Button>
+            </Input>
+          </Menu.Item>
         )
     }
 }
+
+<Search
+    loading={isLoading}
+    onResultSelect={this.handleResultSelect}
+    onSearchChange={this.handleSearchChange}
+    results={results}
+    value={value}
+    {...this.props}
+/>

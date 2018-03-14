@@ -6,6 +6,7 @@ const NoteModal = (props) => (
     <Modal.Content>
       <h3>Your Note: </h3>
       <p>{props.body}</p>
+      <p>{props.createTime}</p>
       <Form>
         <TextArea id='newNote' placeholder='Tell us more' />
       </Form>

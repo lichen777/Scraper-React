@@ -7,8 +7,9 @@ class SavedPost extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      body: 'note history',
-      open: false
+      body: 'none',
+      open: false,
+      createTime: ''
     }
   }
 
@@ -20,7 +21,7 @@ class SavedPost extends Component {
       .then(res => res.json())
       .then(result => {
         if (result.note) {
-          this.setState({ body: result.note.body })
+          this.setState({ body: result.note.body, createTime: new Date(result.note.createAt) })
         } else {
           this.setState({ body: 'No Note added yet'})
         }
@@ -82,13 +83,13 @@ class SavedPost extends Component {
   }
 
   render () {
-    const {body, open} = this.state
+    const {body, open, createTime} = this.state
 
     return (
       <div id={this.props._id}>
         <Segment clearing>
           <div>
-            <h5><a href={this.props.link} target='_blank'>{this.props.title}</a> <p></p> <NoteModal body={body} open={open} onClose={() => this.handleCloseClick()} onSave={() => this.handleSaveClick(this.props._id)} trigger={<NoteButton onClick={() => this.handleNoteClick(this.props._id)} />} /> <Button
+            <h5><a href={this.props.link} target='_blank'>{this.props.title}</a> <p></p> <NoteModal createTime={`${createTime}`} body={body} open={open} onClose={() => this.handleCloseClick()} onSave={() => this.handleSaveClick(this.props._id)} trigger={<NoteButton onClick={() => this.handleNoteClick(this.props._id)} />} /> <Button
                                                                                                                                                                                                     compact
                                                                                                                                                                                                     floated='right'
                                                                                                                                                                                                     color='red'
