@@ -4,29 +4,9 @@ import { Menu, Container, Button, Input } from 'semantic-ui-react'
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import ScrapButton from './components/ScrapButton'
-import Post from './components/Post'
+import HomeContent from './components/HomeContent'
+import SavedContent from './components/SavedContent'
 import AutoSearch from './components/Search'
-import SavedPost from './components/SavedPost'
-
-const HomeContent = props => (
-  <Container text style={{ marginTop: '5em' }}>
-    {props.list.map(item =>
-      <div key={item._id}>
-        <Post _id={item._id} title={item.title} link={item.link} saved={item.saved} />
-      </div>
-     )}
-  </Container>
-)
-
-const SavedContent = props => (
-  <Container text style={{ marginTop: '5em' }}>
-    {props.list.map(item =>
-      <div key={item._id}>
-        <SavedPost _id={item._id} title={item.title} link={item.link} />
-      </div>
-     )}
-  </Container>
-)
 
 class App extends Component {
   constructor (props) {
@@ -39,7 +19,7 @@ class App extends Component {
   }
 
   handleScrap () {
-    const proxyurl = "https://cors-anywhere.herokuapp.com/"
+    const proxyurl = 'https://cors-anywhere.herokuapp.com/'
     const url = 'https://scotch-scraper.herokuapp.com/scrape'
     fetch(proxyurl + url)
       .then(res => console.log(res.status))
@@ -51,10 +31,10 @@ class App extends Component {
 
   componentDidMount () {
     this.getAllArticle()
-    this.getAllSaved(() => console.log(this.state.savedList))
+    this.getAllSaved()
   }
 
-  getAllArticle() {
+  getAllArticle () {
     const proxyurl = 'https://cors-anywhere.herokuapp.com/'
     const url = 'https://scotch-scraper.herokuapp.com/articles'
     fetch(proxyurl + url)
@@ -65,7 +45,7 @@ class App extends Component {
       })
   }
 
-  getAllSaved(cb) {
+  getAllSaved (cb) {
     const proxyurl = 'https://cors-anywhere.herokuapp.com/'
     const url = 'https://scotch-scraper.herokuapp.com/saved'
     fetch(proxyurl + url)

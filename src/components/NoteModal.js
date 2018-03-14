@@ -1,38 +1,30 @@
 import React, { Component } from 'react'
 import { Button, Modal, Form, TextArea } from 'semantic-ui-react'
 
-class NoteModal extends Component {
-  state = { open: false }
-
-  show = size => () => this.setState({ size, open: true })
-  close = () => this.setState({ open: false })
-
-  render() {
-    const { open, size } = this.state
-
-    return (
-      <div>
-        <Button onClick={this.show('small')}>Small</Button>
-
-        <Modal size={size} open={open} onClose={this.close}>
-          <Modal.Header>
-            Note
-          </Modal.Header>
-          <Modal.Content>
-            <Form>
-              <TextArea placeholder='Tell us more' />
-            </Form>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button negative>
-              Cancel
-            </Button>
-            <Button positive icon='checkmark' labelPosition='right' content='Save' />
-          </Modal.Actions>
-        </Modal>
-      </div>
-    )
-  }
-}
+const NoteModal = (props) => (
+  <Modal trigger={props.trigger} size='small'>
+    <Modal.Header>
+      Note
+    </Modal.Header>
+    <Modal.Content>
+      <h3>Your Note: </h3>
+      <p>{props.body}</p>
+      <Form>
+        <TextArea id='newNote' placeholder='Tell us more' />
+      </Form>
+    </Modal.Content>
+    <Modal.Actions>
+      <Button negative onClick={props.onClose}>
+        Cancel
+      </Button>
+      <Button
+        positive
+        icon='checkmark'
+        labelPosition='right'
+        onClick={props.onSave}
+        content='Save' />
+    </Modal.Actions>
+  </Modal>
+)
 
 export default NoteModal
