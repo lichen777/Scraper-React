@@ -1,44 +1,15 @@
-import _ from 'lodash'
-import React, { Component } from 'react'
+import React from 'react'
 import { Search } from 'semantic-ui-react'
 
-export default class AutoSearch extends Component {
-    componentWillMount() {
-        this.resetComponent()
-    }
+const AutoSearch = props => (
+  <Search
+      loading={props.isLoading}
+      onResultSelect={props.onResultSelect}
+      onSearchChange={props.onSearchChange}
+      results={props.results}
+      value={props.value}
+      {...this.props}
+  />
+)
 
-    resetComponent = () => this.setState({ isLoading: false, results: [], value: '' })
-
-    handleResultSelect = (e, { result }) => this.setState({ value: result.title })
-
-    handleSearchChange = (e, { value }) => {
-        this.setState({ isLoading: true, value })
-
-        setTimeout(() => {
-            if (this.state.value.length < 1) return this.resetComponent()
-
-            const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
-            const isMatch = result => re.test(result.title)
-
-            this.setState({
-                isLoading: false,
-                results: _.filter(this.props.source, isMatch),
-            })
-        }, 500)
-    }
-
-    render() {
-        const { isLoading, value, results } = this.state
-
-        return (
-          <Search
-              loading={isLoading}
-              onResultSelect={this.handleResultSelect}
-              onSearchChange={this.handleSearchChange}
-              results={results}
-              value={value}
-              {...this.props}
-          />
-        )
-    }
-}
+export default AutoSearch

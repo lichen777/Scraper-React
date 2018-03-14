@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import { Menu, Container } from 'semantic-ui-react'
+import _ from 'lodash'
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import ScrapButton from './components/ScrapButton'
@@ -13,7 +14,10 @@ class App extends Component {
     super(props)
     this.state = {
       list: [],
-      savedList: []
+      savedList: [],
+      isLoading: false,
+      results: [],
+      value: ''
     }
     this.handleScrap = this.handleScrap.bind(this)
   }
@@ -35,6 +39,42 @@ class App extends Component {
     this.getAllSaved()
   }
 
+  componentWillMount () {
+    this.resetComponent()
+  }
+
+  resetComponent = () => this.setState({ isLoading: false, results: [], value: '' })
+
+  handleResultSelect = (e, { result }) => {
+    //this.getAllArticle()
+    const re = new RegExp(_.escapeRegExp(result.title), 'i')
+    const isMatch = result => re.test(result.title)
+    this.setState({
+      value: result.title,
+      list: _.filter(this.state.list, isMatch)
+     })
+  }
+
+  handleSearchChange = (e, { value }) => {
+      this.setState({ isLoading: true, value })
+
+      setTimeout(() => {
+          if (this.state.value.length < 1) {
+            this.getAllArticle()
+            this.getAllSaved()
+            return this.resetComponent()
+          }
+
+          const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
+          const isMatch = result => re.test(result.title)
+
+          this.setState({
+              isLoading: false,
+              results: _.filter(this.state.list, isMatch)
+          })
+      }, 500)
+  }
+
   getApiRequest(url) {
     return fetch(url)
       .then(res => res.json())
@@ -54,7 +94,7 @@ class App extends Component {
       })
   }
 
-  getAllSaved (cb) {
+  getAllSaved () {
     const proxyurl = 'https://cors-anywhere.herokuapp.com/'
     const url = 'https://scotch-scraper.herokuapp.com/saved'
     fetch(proxyurl + url)
@@ -63,18 +103,17 @@ class App extends Component {
       .catch((error) => {
         console.error(error)
       })
-      .then(cb)
   }
 
   render () {
-    const {list, savedList} = this.state
+    const {list, savedList, isLoading, results, value} = this.state
 
     return (
       <Router>
         <div>
           <Menu fixed='top' inverted stackable>
             <Container>
-              <Menu.Item as='a' header>
+              <Menu.Item as='a' header id="logo">
                 Scotch Scraper
               </Menu.Item>
               <Link className='item' to='/'> Home
@@ -83,7 +122,13 @@ class App extends Component {
               </Link>
               <ScrapButton text='Scrap New Articles' onScrapClick={this.handleScrap} />
               <Menu.Item position='right'>
-                <Search source={list} />
+                <Search
+                  loading={isLoading}
+                  onResultSelect={this.handleResultSelect}
+                  onSearchChange={this.handleSearchChange}
+                  results={results}
+                  value={value}
+                />
               </Menu.Item>
             </Container>
           </Menu>
