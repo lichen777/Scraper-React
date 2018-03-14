@@ -22,8 +22,9 @@ class App extends Component {
     const proxyurl = 'https://cors-anywhere.herokuapp.com/'
     const url = 'https://scotch-scraper.herokuapp.com/scrape'
     fetch(proxyurl + url)
-      .then(res => console.log(res.status))
-      .then(result => window.location.reload())
+      .then(res => res.json())
+      .then(result => console.log(result))
+      .then(() => this.getAllArticle())
       .catch((error) => {
         console.error(error)
       })
@@ -32,6 +33,14 @@ class App extends Component {
   componentDidMount () {
     this.getAllArticle()
     this.getAllSaved()
+  }
+
+  getApiRequest(url) {
+    return fetch(url)
+      .then(res => res.json())
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   getAllArticle () {

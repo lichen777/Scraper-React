@@ -7,11 +7,13 @@ class SavedPost extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      body: 'note history'
+      body: 'note history',
+      open: false
     }
   }
 
   handleNoteClick (key) {
+    this.setState({open: true})
     const proxyurl = 'https://cors-anywhere.herokuapp.com/'
     const url = 'https://scotch-scraper.herokuapp.com/note/' + key
     fetch(proxyurl + url)
@@ -32,25 +34,35 @@ class SavedPost extends Component {
     const data = {
       body: document.getElementById('newNote').value.trim()
     }
-    alert(JSON.stringify(data))
+    const searchParams = Object.keys(data).map((key) => {
+      return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+    }).join('&');
     const proxyurl = 'https://cors-anywhere.herokuapp.com/'
     const url = 'https://scotch-scraper.herokuapp.com/note/' + key
-    fetch(proxyurl + url, {
-      method: 'POST',
+
+    this.postApiRequest(proxyurl + url, "POST", searchParams)
+      .then(() => {
+        this.setState({open: false})
+      })
+  }
+
+  handleCloseClick () {
+    this.setState({open: false})
+  }
+
+  postApiRequest (url, method, data) {
+    return fetch(url, {
+      method: method,
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
       },
-      body: JSON.stringify(data)
+      body: data
     })
       .then(res => res.json())
-      .then(result => console.log(result))
       .catch((error) => {
         console.error(error)
       })
   }
-
-  
 
   handleRemoveClick (key) {
     const proxyurl = 'https://cors-anywhere.herokuapp.com/'
@@ -70,13 +82,13 @@ class SavedPost extends Component {
   }
 
   render () {
-    const body = this.state.body
+    const {body, open} = this.state
 
     return (
       <div id={this.props._id}>
         <Segment clearing>
           <div>
-            <h5><a href={this.props.link} target='_blank'>{this.props.title}</a> <p></p> <NoteModal body={body} onSave={() => this.handleSaveClick(this.props._id)} trigger={<NoteButton onClick={() => this.handleNoteClick(this.props._id)} />} /> <Button
+            <h5><a href={this.props.link} target='_blank'>{this.props.title}</a> <p></p> <NoteModal body={body} open={open} onClose={() => this.handleCloseClick()} onSave={() => this.handleSaveClick(this.props._id)} trigger={<NoteButton onClick={() => this.handleNoteClick(this.props._id)} />} /> <Button
                                                                                                                                                                                                     compact
                                                                                                                                                                                                     floated='right'
                                                                                                                                                                                                     color='red'
