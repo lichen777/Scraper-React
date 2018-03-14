@@ -3,7 +3,7 @@ import Post from './Post'
 import { Container } from 'semantic-ui-react'
 
 const HomeContent = props => (
-  <Container text style={{ marginTop: '5em' }}>
+  <Container text className='main'>
     {props.list.map(item => <div key={item._id}>
                               <Post
                                 _id={item._id}
