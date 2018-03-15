@@ -11,6 +11,7 @@ const HomeContent = props => (
           title={item.title}
           link={item.link}
           saved={item.saved}
+          onClick={props.onClick}
         />
       </div>
     ))}

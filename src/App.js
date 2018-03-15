@@ -18,9 +18,11 @@ class App extends Component {
       isLoading: false,
       results: [],
       value: '',
-      message: true
+      message: true,
+      eventName: ''
     }
     this.handleScrap = this.handleScrap.bind(this)
+    this.handleButtonChange = this.handleButtonChange.bind(this)
   }
 
   handleScrap () {
@@ -32,13 +34,22 @@ class App extends Component {
           this.setState({message: false})
           setTimeout(() => this.setState({message: true}), 3000)
           return this.getAllArticle()
-        }        
+        }
         console.error("something wrong")
       })
       .catch(err => console.error(err))
   }
 
+  handleButtonChange (event) {
+    this.setState({ eventName: event.currentTarget.value })
+  }
+
   componentDidMount () {
+    this.getAllArticle()
+    this.getAllSaved()
+  }
+
+  componentDidUpdate () {
     this.getAllArticle()
     this.getAllSaved()
   }
@@ -132,8 +143,8 @@ class App extends Component {
             </Container>
           </Menu>
           <div>
-            <Route exact path="/" render={() => <HomeContent list={list} />} />
-            <Route path="/saved" render={() => <SavedContent list={savedList} />} />
+            <Route exact path="/" render={() => <HomeContent list={list} onClick={this.handleButtonChange} />} />
+            <Route path="/saved" render={() => <SavedContent list={savedList} onClick={this.handleButtonChange} />} />
           </div>
           <Menu fixed="bottom" compact secondary fluid widths={3}>
             <Menu.Item />

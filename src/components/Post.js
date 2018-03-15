@@ -14,7 +14,6 @@ class Post extends Component {
       }
     })
       .then(res => res.json())
-      .then(result => window.location.reload())
       .catch((error) => {
         console.error(error)
       })

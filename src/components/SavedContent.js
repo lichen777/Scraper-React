@@ -6,7 +6,7 @@ const SavedContent = props => (
   <Container text className="main">
     {props.list.map(item => (
       <div key={item._id}>
-        <SavedPost _id={item._id} title={item.title} link={item.link} />
+        <SavedPost _id={item._id} title={item.title} link={item.link} onClick={props.onClick} />
       </div>
     ))}
   </Container>
