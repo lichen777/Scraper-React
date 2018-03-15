@@ -12,11 +12,16 @@
     "react-scripts": "1.1.1",
     "semantic-ui-react": "^0.78.3"
   },
-  "homepage": "https://github.com/lichen777/Scraper-React.git#readme",
+  "homepage": "https://lichen777.github.io/Scraper-React/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "devDependencies": {
+    "gh-pages": "^1.1.0"
   }
 }
