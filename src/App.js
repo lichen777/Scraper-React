@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import { Menu, Container } from 'semantic-ui-react'
+import { Menu, Container, Message } from 'semantic-ui-react'
 import _ from 'lodash'
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
@@ -17,7 +17,8 @@ class App extends Component {
       savedList: [],
       isLoading: false,
       results: [],
-      value: ''
+      value: '',
+      message: true
     }
     this.handleScrap = this.handleScrap.bind(this)
   }
@@ -26,12 +27,15 @@ class App extends Component {
     const proxyurl = 'https://cors-anywhere.herokuapp.com/'
     const url = 'https://scotch-scraper.herokuapp.com/scrape'
     fetch(proxyurl + url)
-      .then(res => res.json())
-      .then(result => console.log(result))
-      .then(() => this.getAllArticle())
-      .catch((error) => {
-        console.error(error)
+      .then(res => {
+        if(res.ok) {
+          this.setState({message: false})
+          setTimeout(() => this.setState({message: true}), 3000)
+          return this.getAllArticle()
+        }        
+        console.error("something wrong")
       })
+      .catch(err => console.error(err))
   }
 
   componentDidMount () {
@@ -46,7 +50,6 @@ class App extends Component {
   resetComponent = () => this.setState({ isLoading: false, results: [], value: '' })
 
   handleResultSelect = (e, { result }) => {
-    //this.getAllArticle()
     const re = new RegExp(_.escapeRegExp(result.title), 'i')
     const isMatch = result => re.test(result.title)
     this.setState({
@@ -61,7 +64,6 @@ class App extends Component {
       setTimeout(() => {
           if (this.state.value.length < 1) {
             this.getAllArticle()
-            this.getAllSaved()
             return this.resetComponent()
           }
 
@@ -106,39 +108,42 @@ class App extends Component {
   }
 
   render () {
-    const {list, savedList, isLoading, results, value} = this.state
+    const {list, savedList, isLoading, results, value, message} = this.state
 
-    return (
-      <Router>
+    return <Router>
         <div>
-          <Menu fixed='top' inverted stackable>
+          <Menu fixed="top" inverted stackable borderless>
             <Container>
-              <Menu.Item as='a' header id="logo">
+              <Menu.Item as="a" header id="logo">
                 Scotch Scraper
               </Menu.Item>
-              <Link className='item' to='/'> Home
+              <Link className="item" to="/">
+                {" "}
+                Home
               </Link>
-              <Link className='item' to='/saved'> Saved Articles
+              <Link className="item" to="/saved">
+                {" "}
+                Saved Articles
               </Link>
-              <ScrapButton text='Scrap New Articles' onScrapClick={this.handleScrap} />
-              <Menu.Item position='right'>
-                <Search
-                  loading={isLoading}
-                  onResultSelect={this.handleResultSelect}
-                  onSearchChange={this.handleSearchChange}
-                  results={results}
-                  value={value}
-                />
+              <ScrapButton text="Scrap New Articles" onScrapClick={this.handleScrap} />
+              <Menu.Item position="right">
+                <Search loading={isLoading} onResultSelect={this.handleResultSelect} onSearchChange={this.handleSearchChange} results={results} value={value} />
               </Menu.Item>
             </Container>
           </Menu>
-          <div className='main'>
-            <Route exact path='/' render={() => <HomeContent list={list} />} />
-            <Route path='/saved' render={() => <SavedContent list={savedList} />} />
+          <div>
+            <Route exact path="/" render={() => <HomeContent list={list} />} />
+            <Route path="/saved" render={() => <SavedContent list={savedList} />} />
           </div>
+          <Menu fixed="bottom" compact secondary fluid widths={3}>
+            <Menu.Item />
+            <Menu.Item>
+              <Message className="message" success hidden={message} content="Scrape is complete successfully" />
+            </Menu.Item>
+            <Menu.Item />
+          </Menu>
         </div>
-      </Router>
-    )
+      </Router>;
   }
 }
 

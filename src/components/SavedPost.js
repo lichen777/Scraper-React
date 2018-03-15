@@ -1,105 +1,131 @@
-import React, { Component } from 'react'
-import { Segment, Button } from 'semantic-ui-react'
-import NoteModal from './NoteModal'
-import NoteButton from './NoteButton'
+import React, { Component } from "react";
+import { Segment, Button } from "semantic-ui-react";
+import NoteModal from "./NoteModal";
+import NoteButton from "./NoteButton";
 
 class SavedPost extends Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      body: 'none',
+      body: "none",
       open: false,
-      createTime: ''
-    }
+      createTime: ""
+    };
   }
 
-  handleNoteClick (key) {
-    this.setState({open: true})
-    const proxyurl = 'https://cors-anywhere.herokuapp.com/'
-    const url = 'https://scotch-scraper.herokuapp.com/note/' + key
+  handleNoteClick(key) {
+    this.setState({ open: true });
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://scotch-scraper.herokuapp.com/note/" + key;
     fetch(proxyurl + url)
       .then(res => res.json())
       .then(result => {
         if (result.note) {
-          this.setState({ body: result.note.body, createTime: new Date(result.note.createAt) })
+          this.setState({
+            body: result.note.body,
+            createTime: new Date(result.note.createAt)
+          });
         } else {
-          this.setState({ body: 'No Note added yet'})
+          this.setState({ body: "No Note added yet" });
         }
       })
-      .catch((error) => {
-        console.error(error)
-      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
-  handleSaveClick (key) {
+  handleSaveClick(key) {
     const data = {
-      body: document.getElementById('newNote').value.trim()
-    }
-    const searchParams = Object.keys(data).map((key) => {
-      return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
-    }).join('&');
-    const proxyurl = 'https://cors-anywhere.herokuapp.com/'
-    const url = 'https://scotch-scraper.herokuapp.com/note/' + key
-
-    this.postApiRequest(proxyurl + url, "POST", searchParams)
-      .then(() => {
-        this.setState({open: false})
+      body: document.getElementById("newNote").value.trim()
+    };
+    const searchParams = Object.keys(data)
+      .map(key => {
+        return encodeURIComponent(key) + "=" + encodeURIComponent(data[key]);
       })
+      .join("&");
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://scotch-scraper.herokuapp.com/note/" + key;
+
+    this.postApiRequest(proxyurl + url, "POST", searchParams).then(() => {
+      this.setState({ open: false });
+    });
   }
 
-  handleCloseClick () {
-    this.setState({open: false})
+  handleCloseClick() {
+    this.setState({ open: false });
   }
 
-  postApiRequest (url, method, data) {
+  postApiRequest(url, method, data) {
     return fetch(url, {
       method: method,
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
       },
       body: data
     })
       .then(res => res.json())
-      .catch((error) => {
-        console.error(error)
-      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
-  handleRemoveClick (key) {
-    const proxyurl = 'https://cors-anywhere.herokuapp.com/'
-    const url = 'https://scotch-scraper.herokuapp.com/saved/' + key
+  handleRemoveClick(key) {
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://scotch-scraper.herokuapp.com/saved/" + key;
     fetch(proxyurl + url, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
+        Accept: "application/json",
+        "Content-Type": "application/json"
       }
     })
       .then(res => res.json())
       .then(result => window.location.reload())
-      .catch((error) => {
-        console.error(error)
-      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
-  render () {
-    const {body, open, createTime} = this.state
+  render() {
+    const { body, open, createTime } = this.state;
 
     return (
       <div id={this.props._id}>
         <Segment clearing>
           <div>
-            <h5><a href={this.props.link} target='_blank'>{this.props.title}</a> <p></p> <NoteModal createTime={`${createTime}`} body={body} open={open} onClose={() => this.handleCloseClick()} onSave={() => this.handleSaveClick(this.props._id)} trigger={<NoteButton onClick={() => this.handleNoteClick(this.props._id)} />} /> <Button
-                                                                                                                                                                                                    compact
-                                                                                                                                                                                                    floated='right'
-                                                                                                                                                                                                    color='red'
-                                                                                                                                                                                                    onClick={() => this.handleRemoveClick(this.props._id)}> Remove </Button></h5>
+            <h5>
+              <a href={this.props.link} target="_blank">
+                {this.props.title}
+              </a>{" "}
+              <p />{" "}
+              <NoteModal
+                createTime={`${createTime}`}
+                body={body}
+                open={open}
+                onClose={() => this.handleCloseClick()}
+                onSave={() => this.handleSaveClick(this.props._id)}
+                trigger={
+                  <NoteButton
+                    onClick={() => this.handleNoteClick(this.props._id)}
+                  />
+                }
+              />{" "}
+              <Button
+                compact
+                floated="right"
+                color="red"
+                onClick={() => this.handleRemoveClick(this.props._id)}
+              >
+                {" "}
+                Remove{" "}
+              </Button>
+            </h5>
           </div>
         </Segment>
-        <p></p>
+        <p />
       </div>
-    )
+    );
   }
 }
 
-export default SavedPost
+export default SavedPost;

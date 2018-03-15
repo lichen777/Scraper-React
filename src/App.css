@@ -11,6 +11,10 @@ body {
   margin-top: 7em;
 }
 
+.message {
+  text-align: center;
+}
+
 @media screen and (max-width: 420px) {
   .main {
     margin-top: 16em;
