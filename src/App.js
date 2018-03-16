@@ -25,9 +25,8 @@ class App extends Component {
   }
 
   handleScrap() {
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = "https://scotch-scraper.herokuapp.com/scrape";
-    fetch(proxyurl + url)
+    const url = "/scrape";
+    fetch(url)
       .then(res => {
         if (res.ok) {
           this.setState({ message: false });
@@ -41,9 +40,8 @@ class App extends Component {
 
   handleSaveClick(e) {
     const key = e.target.id;
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = "https://scotch-scraper.herokuapp.com/articles/" + key;
-    fetch(proxyurl + url, {
+    const url = "/articles/" + key;
+    fetch(url, {
       method: "PUT",
       headers: {
         Accept: "application/json",
@@ -62,9 +60,8 @@ class App extends Component {
 
   handleRemoveClick(e) {
     const key = e.target.id;
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = "https://scotch-scraper.herokuapp.com/saved/" + key;
-    fetch(proxyurl + url, {
+    const url = "/saved/" + key;
+    fetch(url, {
       method: "PUT",
       headers: {
         Accept: "application/json",
@@ -119,9 +116,8 @@ class App extends Component {
   };
 
   getAllArticle() {
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = "https://scotch-scraper.herokuapp.com/articles";
-    fetch(proxyurl + url)
+    const url = "/articles";
+    fetch(url)
       .then(res => res.json())
       .then(result => this.setState({ list: result }))
       .catch(error => {
@@ -130,9 +126,8 @@ class App extends Component {
   }
 
   getAllSaved() {
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = "https://scotch-scraper.herokuapp.com/saved";
-    fetch(proxyurl + url)
+    const url = "/saved";
+    fetch(url)
       .then(res => res.json())
       .then(result => this.setState({ savedList: result }))
       .catch(error => {

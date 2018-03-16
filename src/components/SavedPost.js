@@ -15,9 +15,8 @@ class SavedPost extends Component {
 
   handleNoteClick(key) {
     this.setState({ open: true });
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = "https://scotch-scraper.herokuapp.com/note/" + key;
-    fetch(proxyurl + url)
+    const url = "/note/" + key;
+    fetch(url)
       .then(res => res.json())
       .then(result => {
         if (result.note) {
@@ -43,10 +42,9 @@ class SavedPost extends Component {
         return encodeURIComponent(key) + "=" + encodeURIComponent(data[key]);
       })
       .join("&");
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = "https://scotch-scraper.herokuapp.com/note/" + key;
+    const url = "/note/" + key;
 
-    this.postApiRequest(proxyurl + url, "POST", searchParams).then(() => {
+    this.postApiRequest(url, "POST", searchParams).then(() => {
       this.setState({ open: false });
     });
   }
