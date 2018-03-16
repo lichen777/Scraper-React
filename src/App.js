@@ -153,7 +153,7 @@ class App extends Component {
               <Link className="item" to="/">
                 {"Home"}
               </Link>
-              <Link className="item" to="/saved">
+              <Link className="item" to="/favorite">
                 {"Saved Articles"}
               </Link>
               <ScrapButton text="Scrap New Articles" onScrapClick={this.handleScrap} />
@@ -164,7 +164,7 @@ class App extends Component {
           </Menu>
           <div>
             <Route exact path="/" render={() => <HomeContent list={list} onClick={e => this.handleSaveClick(e)} />} />
-            <Route path="/saved" render={() => <SavedContent list={savedList} onClick={e => this.handleRemoveClick(e)} />} />
+            <Route path="/favorite" render={() => <SavedContent list={savedList} onClick={e => this.handleRemoveClick(e)} />} />
           </div>
           <Menu fixed="bottom" compact secondary fluid widths={3}>
             <Menu.Item />
