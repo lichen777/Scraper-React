@@ -13,7 +13,6 @@
     "react-scripts": "1.1.1",
     "semantic-ui-react": "^0.78.3"
   },
-  "homepage": "https://lichen777.github.io/Scraper-React/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

@@ -10,116 +10,138 @@ import SavedContent from './components/SavedContent'
 import Search from './components/Search'
 
 class App extends Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       list: [],
       savedList: [],
       isLoading: false,
       results: [],
-      value: '',
-      message: true,
-      eventName: ''
-    }
-    this.handleScrap = this.handleScrap.bind(this)
-    this.handleButtonChange = this.handleButtonChange.bind(this)
+      value: "",
+      message: true
+    };
+    this.handleScrap = this.handleScrap.bind(this);
+    this.handleSaveClick = this.handleSaveClick.bind(this);
   }
 
-  handleScrap () {
-    const proxyurl = 'https://cors-anywhere.herokuapp.com/'
-    const url = 'https://scotch-scraper.herokuapp.com/scrape'
+  handleScrap() {
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://scotch-scraper.herokuapp.com/scrape";
     fetch(proxyurl + url)
       .then(res => {
-        if(res.ok) {
-          this.setState({message: false})
-          setTimeout(() => this.setState({message: true}), 3000)
-          return this.getAllArticle()
+        if (res.ok) {
+          this.setState({ message: false });
+          setTimeout(() => this.setState({ message: true }), 3000);
+          return this.getAllArticle();
         }
-        console.error("something wrong")
+        console.error("something wrong");
       })
-      .catch(err => console.error(err))
+      .catch(err => console.error(err));
   }
 
-  handleButtonChange (event) {
-    this.setState({ eventName: event.currentTarget.value })
+  handleSaveClick(e) {
+    const key = e.target.id;
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://scotch-scraper.herokuapp.com/articles/" + key;
+    fetch(proxyurl + url, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(result => {
+        this.getAllArticle();
+        this.getAllSaved();
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
-  componentDidMount () {
-    this.getAllArticle()
-    this.getAllSaved()
+  handleRemoveClick(e) {
+    const key = e.target.id;
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://scotch-scraper.herokuapp.com/saved/" + key;
+    fetch(proxyurl + url, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(result => {
+        this.getAllArticle();
+        this.getAllSaved();
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
-  componentDidUpdate () {
-    this.getAllArticle()
-    this.getAllSaved()
+  componentDidMount() {
+    this.getAllArticle();
+    this.getAllSaved();
+    this.resetComponent();
   }
 
-  componentWillMount () {
-    this.resetComponent()
-  }
-
-  resetComponent = () => this.setState({ isLoading: false, results: [], value: '' })
+  resetComponent = () =>
+    this.setState({ isLoading: false, results: [], value: "" });
 
   handleResultSelect = (e, { result }) => {
-    const re = new RegExp(_.escapeRegExp(result.title), 'i')
-    const isMatch = result => re.test(result.title)
+    const re = new RegExp(_.escapeRegExp(result.title), "i");
+    const isMatch = result => re.test(result.title);
     this.setState({
       value: result.title,
       list: _.filter(this.state.list, isMatch)
-     })
-  }
+    });
+  };
 
   handleSearchChange = (e, { value }) => {
-      this.setState({ isLoading: true, value })
+    this.setState({ isLoading: true, value });
 
-      setTimeout(() => {
-          if (this.state.value.length < 1) {
-            this.getAllArticle()
-            return this.resetComponent()
-          }
+    setTimeout(() => {
+      if (this.state.value.length < 1) {
+        this.getAllArticle();
+        return this.resetComponent();
+      }
 
-          const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
-          const isMatch = result => re.test(result.title)
+      const re = new RegExp(_.escapeRegExp(this.state.value), "i");
+      const isMatch = result => re.test(result.title);
 
-          this.setState({
-              isLoading: false,
-              results: _.filter(this.state.list, isMatch)
-          })
-      }, 500)
-  }
+      this.setState({
+        isLoading: false,
+        results: _.filter(this.state.list, isMatch)
+      });
+    }, 500);
+  };
 
-  getApiRequest(url) {
-    return fetch(url)
-      .then(res => res.json())
-      .catch((error) => {
-        console.error(error)
-      })
-  }
-
-  getAllArticle () {
-    const proxyurl = 'https://cors-anywhere.herokuapp.com/'
-    const url = 'https://scotch-scraper.herokuapp.com/articles'
+  getAllArticle() {
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://scotch-scraper.herokuapp.com/articles";
     fetch(proxyurl + url)
       .then(res => res.json())
-      .then(result => this.setState({list: result}))
-      .catch((error) => {
-        console.error(error)
-      })
+      .then(result => this.setState({ list: result }))
+      .catch(error => {
+        console.error(error);
+      });
   }
 
-  getAllSaved () {
-    const proxyurl = 'https://cors-anywhere.herokuapp.com/'
-    const url = 'https://scotch-scraper.herokuapp.com/saved'
+  getAllSaved() {
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://scotch-scraper.herokuapp.com/saved";
     fetch(proxyurl + url)
       .then(res => res.json())
-      .then(result => this.setState({savedList: result}))
-      .catch((error) => {
-        console.error(error)
-      })
+      .then(result => this.setState({ savedList: result }))
+      .catch(error => {
+        console.error(error);
+      });
   }
 
-  render () {
-    const {list, savedList, isLoading, results, value, message} = this.state
+  render() {
+    const { list, savedList, isLoading, results, value, message } = this.state;
 
     return <Router>
         <div>
@@ -129,12 +151,10 @@ class App extends Component {
                 Scotch Scraper
               </Menu.Item>
               <Link className="item" to="/">
-                {" "}
-                Home
+                {"Home"}
               </Link>
               <Link className="item" to="/saved">
-                {" "}
-                Saved Articles
+                {"Saved Articles"}
               </Link>
               <ScrapButton text="Scrap New Articles" onScrapClick={this.handleScrap} />
               <Menu.Item position="right">
@@ -143,8 +163,8 @@ class App extends Component {
             </Container>
           </Menu>
           <div>
-            <Route exact path="/" render={() => <HomeContent list={list} onClick={this.handleButtonChange} />} />
-            <Route path="/saved" render={() => <SavedContent list={savedList} onClick={this.handleButtonChange} />} />
+            <Route exact path="/" render={() => <HomeContent list={list} onClick={e => this.handleSaveClick(e)} />} />
+            <Route path="/saved" render={() => <SavedContent list={savedList} onClick={e => this.handleRemoveClick(e)} />} />
           </div>
           <Menu fixed="bottom" compact secondary fluid widths={3}>
             <Menu.Item />

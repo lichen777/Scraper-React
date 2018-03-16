@@ -69,61 +69,25 @@ class SavedPost extends Component {
       });
   }
 
-  handleRemoveClick(key) {
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = "https://scotch-scraper.herokuapp.com/saved/" + key;
-    fetch(proxyurl + url, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .catch(error => {
-        console.error(error);
-      });
-  }
-
   render() {
     const { body, open, createTime } = this.state;
 
-    return (
-      <div id={this.props._id}>
+    return <div id={this.props._id}>
         <Segment clearing>
           <div>
             <h5>
               <a href={this.props.link} target="_blank">
                 {this.props.title}
-              </a>{" "}
-              <p />{" "}
-              <NoteModal
-                createTime={`${createTime}`}
-                body={body}
-                open={open}
-                onClose={() => this.handleCloseClick()}
-                onSave={() => this.handleSaveClick(this.props._id)}
-                trigger={
-                  <NoteButton
-                    onClick={() => this.handleNoteClick(this.props._id)}
-                  />
-                }
-              />{" "}
-              <Button
-                compact
-                floated="right"
-                color="red"
-                onClick={() => this.handleRemoveClick(this.props._id)}
-              >
-                {" "}
-                Remove{" "}
+              </a> <p /> 
+              <NoteModal createTime={`${createTime}`} body={body} open={open} onClose={() => this.handleCloseClick()} onSave={() => this.handleSaveClick(this.props._id)} trigger={<NoteButton onClick={() => this.handleNoteClick(this.props._id)} />} /> 
+              <Button id={this.props._id} compact floated="right" color="red" onClick={this.props.onClick}>
+                {"Remove"}
               </Button>
             </h5>
           </div>
         </Segment>
         <p />
-      </div>
-    );
+      </div>;
   }
 }
 
